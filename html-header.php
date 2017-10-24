@@ -13,3 +13,8 @@
   <link rel="stylesheet" href="./resources/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>

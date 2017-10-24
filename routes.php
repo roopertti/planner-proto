@@ -1,7 +1,6 @@
 <?php
 
 $path = './components/';
-require_once($path.'header/header.php');
 
 if(isset($_POST['login'])) {
   $username = mysqli_real_escape_string($db, $_POST['username']);
@@ -38,24 +37,31 @@ if(isset($_POST['register'])) {
     } else {
       $sql = "INSERT INTO user(username, email, password) VALUES('$username','$email','$password')";
       $result = mysqli_query($db, $sql);
+      print_r($result);
       if(!$result) {
         echo printAlert("User creation failed!", true);
+        print_r(mysqli_error());
         require_once($path.'login-form/login-form.php');
       } else {
-        echo printAlert("User succesfully created!", false);
+        echo printAlert("User succesfully created! Now try logging in!", false);
         require_once($path.'login-form/login-form.php');
       }
     }
   }
 }
 
-if(isset($_SESSION['logged_id']) && !empty($_SESSION['logged_id'])) {
-  //TODO päivitetään käyttäjän dashboard
+require_once($path.'header/header.php');
+
+if(isset($_SESSION['logged_user']) && !empty($_SESSION['logged_user'])) {
+  if(isset($_GET['action']) && !empty($_GET['action'])) {
+    if($_GET['action'] == 'logout') {
+      session_destroy();
+      header('Location: ./');
+    }
+  }
+  echo '<h3>Dashboard</h3>';
 } else {
-
+  require_once($path.'login-form/login-form.php');
 }
-
-
-require_once($path.'login-form/login-form.php');
 
 ?>
