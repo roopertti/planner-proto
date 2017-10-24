@@ -9,7 +9,9 @@ if(isset($_POST['login'])) {
   $sql = "SELECT id FROM user WHERE username = '$username' AND password = '$password'";
   $result = mysqli_query($db, $sql);
   if(mysqli_num_rows($result) == 1) {
+    $row = mysqli_fetch_assoc($result);
     $_SESSION['logged_user'] = $username;
+    $_SESSION['logged_user_id'] = $row['id'];
   } else {
     $alert = printAlert("Login failed.", true);
     echo $alert;
@@ -59,7 +61,7 @@ if(isset($_SESSION['logged_user']) && !empty($_SESSION['logged_user'])) {
       header('Location: ./');
     }
   }
-  echo '<h3>Dashboard</h3>';
+  require_once($path.'dashboard/view.php');
 } else {
   require_once($path.'login-form/login-form.php');
 }

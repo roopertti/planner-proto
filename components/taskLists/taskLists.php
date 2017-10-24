@@ -1,61 +1,25 @@
 <?php
-$taskLists = array(
-  0 => array(
-    "title" => "Random taskilista",
-    "author" => "Robert Kuhlmann",
-    "created" => "20.10.2017",
-    "tasks" => array(
-      0 => array(
-        "timestamp" => "20.10.2017",
-        "content" => "tee jotakki",
-        "done" => false
-      ),
-      1 => array(
-        "timestamp" => "20.10.2017",
-        "content" => "tee jotakki muuta",
-        "done" => false
-      )
-    )
-  )
-);
+require_once('./components/taskLists/tasklist.class.php');
 
-if($taskLists && count($taskLists) > 0) {
-  ob_start();
-  ?>
-  <div class="container">
-    <div class="row">
-    <?php
-    foreach($taskLists as $list) {
-      ?>
-      <div class="col-md-4">
-        <div class="tasklist-header">
-          <h4><?=$list['title']?></h4>
-        </div>
-        <div class="tacklist-body">
-          <table class="table">
-            <tbody>
-              <?php
-              foreach($list['tasks'] as $task) {
-                echo '<tr>';
-                $taskContent = '<td>' . $task['timestamp'] . '</td>';
-                $taskContent .= '<td>' . $task['content'] . '</td>';
-                if(!$task['done']) {
-                  $taskContent .= '<td><button class="btn btn-primary"></button></td>';
-                } else {
-                  $taskContent .= "<td><button class='btn btn-success'><i class='fa fa-check' aria-hidden='true'></i></button></td>";
-                }
-                echo $taskContent;
-                echo '</tr>';
-              } ?>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <?php
-    } ?>
-    </div>
-  </div> <?php
+$tasklists = array();
+$id = $_SESSION['logged_user_id'];
+$sql = "SELECT id, title, created FROM tasklists WHERE author = '$id'";
+$result = mysqli_query($db, $sql);
 
-  $html = ob_get_clean();
-  echo $html;
-} ?>
+if(mysqli_num_rows($result) < 1) {
+  //TODO ei oo taskilistoja
+} else {
+  while($row = mysqli_fetch_assoc($result)) {
+    $tasklist = new Tasklist(
+      (!empty($row['id'])       ? $row['id']      : null),
+      (!empty($row['title'])    ? $row['title']   : null),
+      (!empty($row['created'])  ? $row['created'] : null)
+    );
+    $tasklists[] = $tasklist;
+  }
+  print_r($tasklists);
+}
+
+
+
+?>
