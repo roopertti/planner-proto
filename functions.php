@@ -1,4 +1,5 @@
 <?php
+require_once('./config/db.php');
 
 function printAlert($msg, $danger) {
   $type = ($danger ? 'danger' : 'success');
@@ -11,5 +12,14 @@ function printAlert($msg, $danger) {
   <?php $html = ob_get_clean();
   return $html;
 }
+
+/*function execQuery($query) {
+  $result = mysqli_query($db, $query);
+  if(!$result) {
+    return false;
+  } else {
+    return $result;
+  }
+}*/
 
 ?>

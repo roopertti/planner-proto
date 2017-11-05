@@ -13,11 +13,16 @@ if(mysqli_num_rows($result) < 1) {
     $tasklist = new Tasklist(
       (!empty($row['id'])       ? $row['id']      : null),
       (!empty($row['title'])    ? $row['title']   : null),
-      (!empty($row['created'])  ? $row['created'] : null)
+      (!empty($row['created'])  ? $row['created'] : null),
+      $db
     );
     $tasklists[] = $tasklist;
   }
-  print_r($tasklists);
+
+  foreach($tasklists as $tasklist) {
+    $tasklist->getTasks();
+    $tasklist->renderTasks();
+  }
 }
 
 
